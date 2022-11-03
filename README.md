@@ -11,6 +11,6 @@ El juego esta desarrollado íntegramente en PHP.
 ## Integrantes del grupo 14
 - Pamich Gabriel - FAI-1515
 - Ojeda Alejandra - FAI-4231
-- Simkus Julián - FAI-4237
+- Simkus Julian - FAI-4237
 - Blanco Julián - FAI-3858
 
