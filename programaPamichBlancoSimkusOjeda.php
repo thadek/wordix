@@ -7,7 +7,7 @@ include_once("wordix.php");
 
 /* Apellido, Nombre. Legajo. Carrera. mail. Usuario Github */
 /* Pamich Gabriel, FAI-1515, TUDW, gabriel.pamich@est.fi.uncoma.edu.ar, GitHub: /thadek
-*  Blanco Julian, FAI-3858, TUDW, julian.blanco@est.fi.uncoma.edu.ar 
+*  Blanco Julian, FAI-3858, TUDW, julian.blanco@est.fi.uncoma.edu.ar , GitHub: /juliaanbl
 *  Simkus Julian, FAI-4237, TUDW, simkusj@yahoo.com.ar, GitHub: /SimkusJ
 *  Ojeda Alejandra FAI-4231,TUDW, malejandra.ojeda@est.fi.uncoma.edu.ar,GitHub: /alejandraob
 */
