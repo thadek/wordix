@@ -9,7 +9,7 @@ include_once("wordix.php");
 /* Pamich Gabriel, FAI-1515, TUDW, gabriel.pamich@est.fi.uncoma.edu.ar, GitHub: /thadek
 *  Blanco Julian, FAI-3858, TUDW, julian.blanco@est.fi.uncoma.edu.ar 
 *  Simkus Julian, FAI-4237, TUDW, simkusj@yahoo.com.ar
-*  Ojeda Alejandra, -completar-
+*  Ojeda Alejandra FAI-4231,TUDW, malejandra.ojeda@est.fi.uncoma.edu.ar,GitHub: /alejandraob
 */
 
 
