@@ -37,7 +37,7 @@ function cargarColeccionPalabras()
 
 /**
  * Recibe un string y lo escribe por consola en color violeta.
- * @param $texto
+ * @param string $texto
  */
 function escribirVioleta($texto)
 {
@@ -45,7 +45,7 @@ function escribirVioleta($texto)
 }
 /**
  * Recibe un string y lo escribe por consola en color azul.
- * @param $texto
+ * @param string $texto
  */
 function escribirAzul($texto)
 {
@@ -54,7 +54,6 @@ function escribirAzul($texto)
 
 /**
  * Muestra el logo del juego 
- * 
  */
 function escribirLogo()
 {
@@ -110,18 +109,18 @@ function escribirMenu()
  */
 function esperarUnosSegundosAntesDeContinuar()
 {
-    escribirVioleta("Volviendo al menu principal en \n");
+    escribirVioleta("\nVolviendo al menu principal en \n");
     for ($i = 5; $i > 0; $i--) {
         escribirAzul($i . "s\r");
         sleep(1);
     }
-    echo "\n";
+    echo "\n\n";
 }
 
 /** Agrega una palabra nueva al arreglo que viene por parametro reutilizando una funcion
  * que valida la palabra ingresada por el usuario
- * @param ARRAY<string> $arregloPalabras
- * @return ARRAY<string> 
+ * @param array<string> $arregloPalabras
+ * @return array<string> 
  */
 function agregarPalabra($arregloPalabras)
 {
@@ -144,11 +143,84 @@ function agregarPalabra($arregloPalabras)
     return $arregloPalabras;
 }
 
+/**
+ * Esta funcion verifica si el usuario jugo esa palabra anteriormente y retorna true o false segun el caso.
+ * @param array<string> $arregloPalabras
+ * @param string $palabra
+ * @return boolean
+ */
+function verificarSiElUsuarioYaJugoEsaPalabra($arregloPartidas, $palabra, $nombreJugador)
+{
+    /** boolean $yaJugo */
+    $yaJugo = false;
+    foreach ($arregloPartidas as $partida) {
+        if (($partida["palabraWordix"] == $palabra) && ($partida["jugador"] == $nombreJugador)) {
+            $yaJugo = true;
+        }
+    }
+    return $yaJugo;
+}
+
+/**
+ * Esta funcion lee el nombre de un jugador, verifica que sea una palabra y en caso de serlo, lo retorna.
+ * @return string
+ */
+function leerNombreJugador()
+{
+    /** string $nombreJugador */
+    escribirAzul("Ingrese su nombre: ");
+    $nombreJugador = trim(fgets(STDIN));
+    while(!esPalabra($nombreJugador)){
+        escribirAzul("❌❌ El nombre ingresado no es válido, ingrese un nombre válido ❌❌ \n");
+        escribirAzul("Ingrese su nombre: ");
+        $nombreJugador = trim(fgets(STDIN));
+    }
+    return $nombreJugador;
+}
+
+
+
+
+
+/**
+ * Esta funcion inicia una partida de wordix con una palabra elegida por el usuario, 
+ * comprueba que este no la haya jugado anteriormente 
+ * y retorna la coleccion de partidas la ultima partida jugada.
+ * @param array<string> $arregloPalabras
+ * @param array<partida> $arregloPartidas
+ * @return array<partida>
+ */
+function jugarEligiendoPalabra($arregloPalabras,$arregloPartidas){
+    // string $nombreJugador
+    // int numeroPalabra
+    // array<partida> $partida
+
+    //Solicito el nombre del jugador validando una entrada correcta.
+    $nombreJugador = leerNombreJugador();
+    //Solicito el numero de palabra a jugar, validando que sea un numero y que este dentro del rango del arreglo.
+    escribirAzul("\nIngrese el numero de la palabra a jugar: ");
+    $numeroPalabra = solicitarNumeroEntre(1, count($arregloPalabras));
+    //Ajusto el numero de palabra para que coincida con el indice del arreglo
+    $numeroPalabra--;
+    //Verifico que el numero de palabra no haya sido jugado anteriormente por ese jugador
+    if(verificarSiElUsuarioYaJugoEsaPalabra($arregloPartidas, $arregloPalabras[$numeroPalabra], $nombreJugador)) {
+        escribirAzul("\n❌❌ ".$nombreJugador.", ya jugaste esa palabra. Volvé a intentar con otro numero de palabra ❌❌ \n");
+    }else{
+        //Juego la palabra elegida
+        $partida = jugarWordix($arregloPalabras[$numeroPalabra], $nombreJugador);
+        //Agrego la partida al arreglo de partidas
+        array_push($arregloPartidas, $partida);
+    }
+    return $arregloPartidas;
+}
+
+
+
 
 /**
  * Muestra los datos de una partida específica. Recibe el arreglo de partidas, 
  * y pide al usuario el numero de partida a visualizar. En caso de existir la muestra, caso contrario muestra un mensaje de error.
- * @param $coleccionPartidas
+ * @param array<partida> $listaPartidas
  * @return void
  */
 function mostrarPartida($listaPartidas)
@@ -201,8 +273,6 @@ $coleccionPalabras = cargarColeccionPalabras();
 //Cargo el arreglo de partidas precargadas en el arreglo de partidas
 $coleccionPartidas = cargarPartidas();
 
-
-
 escribirLogo();
 //Proceso:
 do {
@@ -212,7 +282,8 @@ do {
     $opcion = trim(fgets(STDIN));
     switch ($opcion) {
         case 1:
-            //completar qué secuencia de pasos ejecutar si el usuario elige la opción 1
+            //Juego una palabra elegida
+            $coleccionPartidas = jugarEligiendoPalabra($coleccionPalabras, $coleccionPartidas);
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 2:
