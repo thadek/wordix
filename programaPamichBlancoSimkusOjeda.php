@@ -58,15 +58,15 @@ function escribirAzul($texto)
  */
 function escribirLogo()
 {
- escribirAzul("
+    escribirAzul("
  ██╗    ██╗ ██████╗ ██████╗ ██████╗ ██╗██╗  ██╗
  ██║    ██║██╔═══██╗██╔══██╗██╔══██╗██║╚██╗██╔╝
  ██║ █╗ ██║██║   ██║██████╔╝██║  ██║██║ ╚███╔╝ 
  ██║███╗██║██║   ██║██╔══██╗██║  ██║██║ ██╔██╗ 
  ╚███╔███╔╝╚██████╔╝██║  ██║██████╔╝██║██╔╝ ██╗
   ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═\n");
-  escribirVioleta("*********************************************************\n");
- echo "\n";
+    escribirVioleta("*********************************************************\n");
+    echo "\n";
 }
 
 
@@ -112,11 +112,36 @@ function esperarUnosSegundosAntesDeContinuar()
 {
     escribirVioleta("Volviendo al menu principal en \n");
     for ($i = 5; $i > 0; $i--) {
-        escribirAzul($i."s\r");
+        escribirAzul($i . "s\r");
         sleep(1);
     }
     echo "\n";
+}
+
+/** Agrega una palabra nueva al arreglo que viene por parametro reutilizando una funcion
+ * que valida la palabra ingresada por el usuario
+ * @param ARRAY<string> $arregloPalabras
+ * @return ARRAY<string> 
+ */
+function agregarPalabra($arregloPalabras)
+{
+    /** string $palabraNueva */
+
+    escribirAzul("Agregar palabra nueva a WORDIX o escriba salir para volver al menu anterior \n");
+    $palabraNueva = leerPalabra5Letras();
+    // Mientras la palabra exista dentro del arreglo solicitara una palabra nueva
+
+    while (($palabraNueva != "SALIR") && (in_array($palabraNueva, $arregloPalabras))) {
+        escribirAzul("❌❌ La palabra " . $palabraNueva . " ingresada ya existe, ingrese otra o escriba salir para volver al menu anterior ❌❌ \n");
+        $palabraNueva = leerPalabra5Letras();
+    }
     
+    if ($palabraNueva != "SALIR"){
+    //agrego la palabra nueva al arreglo existente
+    array_push($arregloPalabras, $palabraNueva);
+    escribirVioleta("Se agrego la palabra: " . $palabraNueva . "\n");
+    }
+    return $arregloPalabras;
 }
 
 
@@ -126,27 +151,27 @@ function esperarUnosSegundosAntesDeContinuar()
  * @param $coleccionPartidas
  * @return void
  */
-function mostrarPartida($listaPartidas){
+function mostrarPartida($listaPartidas)
+{
     // int $numeroPartida, $intentos
-   escribirAzul("Ingrese el número de partida que desea ver: ");    
-   //Pasar por validacion de numero el dato ingresado.
-   $numeroPartida = solicitarNumeroEntre(1,count($listaPartidas));
-   //Resto uno al numero de partida para que coincida con el indice del arreglo
-   $numeroPartida = $numeroPartida - 1;
-   //Dejo mas prolijo el codigo 
+    escribirAzul("Ingrese el número de partida que desea ver: ");
+    //Pasar por validacion de numero el dato ingresado.
+    $numeroPartida = solicitarNumeroEntre(1, count($listaPartidas));
+    //Resto uno al numero de partida para que coincida con el indice del arreglo
+    $numeroPartida = $numeroPartida - 1;
+    //Dejo mas prolijo el codigo 
     $intentos = $listaPartidas[$numeroPartida]["intentos"];
-    echo str_repeat("\n",10);
+    echo str_repeat("\n", 10);
     escribirAzul("************************************************************\n");
-    escribirAzul("Partida WORDIX ".($numeroPartida+1).":");
-    escribirVioleta("palabra ".$listaPartidas[$numeroPartida]["palabraWordix"]."\n");
+    escribirAzul("Partida WORDIX " . ($numeroPartida + 1) . ":");
+    escribirVioleta("palabra " . $listaPartidas[$numeroPartida]["palabraWordix"] . "\n");
     escribirAzul("Jugador: ");
-    escribirVioleta($listaPartidas[$numeroPartida]["jugador"]."\n");
+    escribirVioleta($listaPartidas[$numeroPartida]["jugador"] . "\n");
     escribirAzul("Puntaje: ");
-    escribirVioleta($listaPartidas[$numeroPartida]["puntaje"]." puntos \n");
+    escribirVioleta($listaPartidas[$numeroPartida]["puntaje"] . " puntos \n");
     escribirAzul("Intentos: ");
-    escribirVioleta((( $intentos === 0 ) ? "No adivino la palabra\n" : "Adivino la palabra en " .$intentos." intent".(($intentos===1)?"o":"os"). "\n"));
+    escribirVioleta((($intentos === 0) ? "No adivino la palabra\n" : "Adivino la palabra en " . $intentos . " intent" . (($intentos === 1) ? "o" : "os") . "\n"));
     escribirAzul("************************************************************\n");
-
 }
 
 
@@ -212,7 +237,7 @@ do {
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 7:
-            //completar qué secuencia de pasos ejecutar si el usuario elige la opción 7
+            $coleccionPalabras = agregarPalabra($coleccionPalabras);
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 8:
