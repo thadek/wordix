@@ -247,9 +247,52 @@ function mostrarPartida($listaPartidas)
     escribirAzul("************************************************************\n");
 }
 
-
-
-
+/**
+ * Muestra la primera partida ganadora de cada jugador
+ * @param array $listaDePartidas
+ * @return void
+ */
+function MostrarPrimeraPartidaGanadora($listaDePartidas)
+{
+    // int $n, $i
+    // string $nombre $nombreGanador
+    // Asigno la cantidas de partidas a $n
+    $n = count($listaDePartidas);
+    // Inicializo $i
+    $i = 0;
+    // Inicializo $nombre
+    $nombre = "";
+    // Solicito el nombre del jugador el cual quiero ver su primera partida ganada
+    $nombreGanador = leerNombreJugador();
+    // Realizo un recorrido parcial que se cortara al encontrar el elemento
+    while($i<$n && $nombreGanador != $nombre && $listaDePartidas[$i]["puntaje"] > 0){
+        $nombre = $listaDePartidas[$i]["jugador"];
+        $i = $i+1;
+    }
+    // En caso de que el nombre solicitado coincida con alguno de los del arreglo se mostrara su primera partida ganada
+    if($nombreGanador == $nombre){
+        $nombreGanador = $nombre;
+        $i = $i-1;
+        echo str_repeat("\n", 10);
+        escribirAzul("************************************************************\n");
+        escribirAzul("Partida WORDIX " . ($i+1) . ": ");
+        escribirVioleta("palabra " . $listaDePartidas[$i]["palabraWordix"] . "\n");
+        escribirAzul("Jugador: ");
+        escribirVioleta($nombreGanador . "\n");
+        escribirAzul("Puntaje: ");
+        escribirVioleta($listaDePartidas[$i]["puntaje"] . " puntos \n");
+        escribirAzul("Intentos: ");
+        escribirVioleta((($i === 0) ? "No adivino la palabra\n" : "Adivino la palabra en " . $listaDePartidas[$i]["intentos"] . " intent" . (($listaDePartidas[$i]["intentos"] === 1) ? "o" : "os") . "\n"));
+        escribirAzul("************************************************************\n");
+    }
+    // En este caso seria de que el nombre de jugador todavia no haya jugado o ganado una partida de WORDIX
+    else{
+        echo str_repeat("\n", 10);
+        escribirAzul("El jugador ");
+        escribirVioleta($nombreGanador); 
+        escribirAzul(" todavia no ha jugado o ganado una partida de WORDIX\n");
+    }
+}
 
 /* ... COMPLETAR ... */
 
@@ -297,7 +340,8 @@ do {
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 4:
-            //completar qué secuencia de pasos ejecutar si el usuario elige la opción 4
+            //Muestra primera partida ganadora
+            MostrarPrimeraPartidaGanadora($coleccionPartidas);
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 5:
