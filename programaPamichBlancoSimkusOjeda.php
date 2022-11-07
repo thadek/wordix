@@ -147,6 +147,7 @@ function agregarPalabra($arregloPalabras)
  * Esta funcion verifica si el usuario jugo esa palabra anteriormente y retorna true o false segun el caso.
  * @param array<string> $arregloPalabras
  * @param string $palabra
+ * @param string $nombreJugador
  * @return boolean
  */
 function verificarSiElUsuarioYaJugoEsaPalabra($arregloPartidas, $palabra, $nombreJugador)
