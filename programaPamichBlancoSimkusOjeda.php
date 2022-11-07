@@ -274,7 +274,7 @@ function MostrarPrimeraPartidaGanadora($listaDePartidas)
         $i = $i-1;
         echo str_repeat("\n", 10);
         escribirAzul("************************************************************\n");
-        escribirAzul("Partida WORDIX " . ($i) . ": ");
+        escribirAzul("Partida WORDIX " . ($i+1) . ": ");
         escribirVioleta("palabra " . $listaDePartidas[$i]["palabraWordix"] . "\n");
         escribirAzul("Jugador: ");
         escribirVioleta($nombreGanador . "\n");
