@@ -401,6 +401,106 @@ function mostrarPrimeraPartidaGanadora($listaDePartidas)
     }
 }
 
+
+
+/*Realizaremos la funcion que sacara la estadistica del Jugador desde su nombre */
+/** 
+ * Esta funcion tendra que leer el nombre del jugador y un resumen de juego del participante
+ * @param array $arregloPartidas
+ */
+function estadisticaJugador($arregloPartidas){
+    /*Esta funcion tendra variables propias como
+     String $nombreJugador
+*/
+$nombreJugador=leerNombreJugador();
+$arregloEstadistica=obtenerEstadisticasJugador($arregloPartidas, $nombreJugador);
+mostrarEstadisticasPlayer($arregloEstadistica);
+   
+}
+
+/**
+ * Muestra por pantalla los resultados de una partida recibida por parámetro.
+ * @param array $partida
+ */
+function mostrarEstadisticasPlayer($estadisticas)
+{
+    echo str_repeat("\n", 3);
+    escribirAzul("************************************************************\n");
+    escribirVioleta("Jugador: " . $estadisticas["jugador"] . "\n".
+    "Partidas: " . $estadisticas["totalPartidas"] . "\n".
+    "Puntaje Total: ".$estadisticas["puntajeTotal"]."\n".
+    "Victorias: ". $estadisticas["victorias"] . "\n".
+    "Porcentaje Victorias: ". $estadisticas["porcentaje"]. "% \n ".
+    "Adivinadas: \n".
+    "   Intento 1: ".$estadisticas["intento1"]."\n".
+    "   Intento 2: ".$estadisticas["intento2"]."\n".
+    "   Intento 3: ".$estadisticas["intento3"]."\n".
+    "   Intento 4: ".$estadisticas["intento4"]."\n".
+    "   Intento 5: ".$estadisticas["intento5"]."\n".
+    "   Intento 6: ".$estadisticas["intento6"]."\n");
+    //escribirVioleta(. "\n"));
+    escribirAzul("************************************************************\n");
+    echo str_repeat("\n", 3);
+}
+
+
+
+
+/**
+ * Esta funcion  recibe el nombre de un jugador y genera un arreglo asociativo con las estadistica del mismo y lo retorna
+ * @param string $nombreJugador;
+ * @param array $arregloPartidas;
+ * @return array $estadisticasPlayer;
+ */
+function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador){
+
+
+    //creamos array asociativo para guardar la informacion del jugador
+    $estadisticasPlayer=[];
+    $estadisticasPlayer=["jugador"=>$nombreJugador, "puntajeTotal"=>0,"victorias"=>0, "totalPartidas"=>0,"porcentaje"=>0,
+    "intento1"=>0,"intento2"=>0,"intento3"=>0,"intento4"=>0,"intento5"=>0,"intento6"=>0];
+ 
+     //Ejecutamos funcion para saber el historial del jugar
+     $arregloPartidasJugador=obtenerPartidasDeUnJugador($arregloPartidas, $nombreJugador);  
+    //Guardamos informacion del total de partidas
+    $estadisticasPlayer["totalPartidas"]=count($arregloPartidasJugador);
+
+    //Utilizamos el foreach para utilizar los elementos del array que nos devuelve la funcion obtenerPartidasDeUnJugador
+    foreach($arregloPartidasJugador as $partida){
+        //Sumamos los puntajes que tiene en cada juego
+        $estadisticasPlayer["puntajeTotal"]+=$partida["puntaje"];
+
+    //Comprobamos que el puntaje sea superior a cero para saber que es una victoria
+       if ($partida['puntaje']>0){
+        $estadisticasPlayer["victorias"]++;
+       }
+    //Contamos la cantidad de intentos realizados por cada partida
+        switch ($partida['intentos']) {
+            case '1':
+                $estadisticasPlayer['intento1']++;
+                break;
+            case '2':
+                $estadisticasPlayer['intento2']++;
+                break;
+            case '3':
+                $estadisticasPlayer['intento3']++;
+                break;
+            case '4':
+                $estadisticasPlayer['intento4']++;
+                break;
+            case '5':
+                $estadisticasPlayer['intento5']++;
+                break;
+            case '6':
+                $estadisticasPlayer['intento6']++;
+                break;
+        }
+    }
+//Calculamos el porcentaje de Victorias
+$estadisticasPlayer['porcentaje']=round((($estadisticasPlayer['victorias']/$estadisticasPlayer['totalPartidas'])*100), 0);
+return $estadisticasPlayer;
+}
+
 /* ... COMPLETAR ... */
 
 
@@ -454,6 +554,7 @@ do {
             break;
         case 5:
             //completar qué secuencia de pasos ejecutar si el usuario elige la opción 5
+            estadisticaJugador($coleccionPartidas);
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 6:
