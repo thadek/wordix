@@ -169,7 +169,7 @@ function verificarSiElUsuarioYaJugoEsaPalabra($arregloPartidas, $palabra, $nombr
 }
 
 /**
- * Esta funcion lee el nombre de un jugador, verifica que sea una palabra y en caso de serlo, lo retorna.
+ * Esta funcion lee el nombre de un jugador, verifica que sea una palabra y en caso de serlo, retorna el nombre en minusculas.
  * @return string
  */
 function leerNombreJugador()
@@ -182,7 +182,8 @@ function leerNombreJugador()
         escribirAzul("Ingrese su nombre: ");
         $nombreJugador = trim(fgets(STDIN));
     }
-    return $nombreJugador;
+    
+    return strtolower($nombreJugador);
 }
 
 /**
@@ -308,7 +309,7 @@ function jugarConPalabraAleatoria($arregloPalabras, $arregloPartidas)
     //Obtengo una palabra aleatoria que no haya jugado el jugador
     $palabraAleatoriaSinJugar = obtenerPalabraAleatoriaSinJugar($arregloPalabras, $arregloPartidas, $nombreJugador);
     //Juego la palabra aleatoria si no jugo todas las palabras
-    if ($palabraAleatoriaSinJugar !== "JUGO_TODAS") {
+    if ($palabraAleatoriaSinJugar != "JUGO_TODAS") {
         $partida = jugarWordix($palabraAleatoriaSinJugar, $nombreJugador);
         //Agrego la partida al arreglo de partidas
         array_push($arregloPartidas, $partida);
