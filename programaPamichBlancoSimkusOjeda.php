@@ -86,11 +86,13 @@ function cargarPartidas()
             ["palabraWordix" => "FUEGO", "jugador" => "julians", "intentos" => 5, "puntaje" => 2],
             ["palabraWordix" => "QUESO", "jugador" => "gabi", "intentos" => 4, "puntaje" => 3],
             ["palabraWordix" => "TARTA", "jugador" => "jose", "intentos" => 3, "puntaje" => 4],
-            ["palabraWordix" => "TORTA", "jugador" => "majo", "intentos" => 1, "puntaje" => 6],
+            ["palabraWordix" => "TORTA", "jugador" => "majo", "intentos" => 0, "puntaje" => 0],
             ["palabraWordix" => "ARBOL", "jugador" => "ale", "intentos" => 2, "puntaje" => 5],
             ["palabraWordix" => "SALAS", "jugador" => "maria", "intentos" => 3, "puntaje" => 4],
-            ["palabraWordix" => "RASGO", "jugador" => "majo", "intentos" => 6, "puntaje" => 1]
-        ];
+            ["palabraWordix" => "RASGO", "jugador" => "majo", "intentos" => 0, "puntaje" => 0],
+            ["palabraWordix" => "RASGO", "jugador" => "majo", "intentos" => 1, "puntaje" => 6]
+
+        ]; 
     return ($coleccionPartidasPreCargadas);
 }
 
@@ -381,8 +383,10 @@ function mostrarPrimeraPartidaGanadora($listaDePartidas)
     // Solicito el nombre del jugador el cual quiero ver su primera partida ganada
     $nombreGanador = leerNombreJugador();
     // Realizo un recorrido parcial que se cortara al encontrar el elemento
-    while ($i < $n && $nombreGanador != $nombre && $listaDePartidas[$i]["puntaje"] > 0) {
-        $nombre = $listaDePartidas[$i]["jugador"];
+    while (($i < $n) && ($nombreGanador != $nombre)) {
+        if($listaDePartidas[$i]["puntaje"] > 0){
+            $nombre = $listaDePartidas[$i]["jugador"];
+        } 
         $i = $i + 1;
     }
     // En caso de que el nombre solicitado coincida con alguno de los del arreglo se mostrara su primera partida ganada
@@ -477,22 +481,22 @@ function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador){
        }
     //Contamos la cantidad de intentos realizados por cada partida
         switch ($partida['intentos']) {
-            case '1':
+            case 1:
                 $estadisticasPlayer['intento1']++;
                 break;
-            case '2':
+            case 2:
                 $estadisticasPlayer['intento2']++;
                 break;
-            case '3':
+            case 3:
                 $estadisticasPlayer['intento3']++;
                 break;
-            case '4':
+            case 4:
                 $estadisticasPlayer['intento4']++;
                 break;
-            case '5':
+            case 5:
                 $estadisticasPlayer['intento5']++;
                 break;
-            case '6':
+            case 6:
                 $estadisticasPlayer['intento6']++;
                 break;
         }
@@ -502,7 +506,36 @@ $estadisticasPlayer['porcentaje']=round((($estadisticasPlayer['victorias']/$esta
 return $estadisticasPlayer;
 }
 
-/* ... COMPLETAR ... */
+
+
+
+
+/**
+ * Esta funcion recibe el arreglo de partidas y las ordena usando uasort por jugador y por palabra 
+ * y lo muestra por pantalla con print_r 
+ * @param array $arregloPartidas
+ * 
+ */
+function ordenarYMostrarPartidasPorJugadoryPorPalabra($arregloPartidas){
+    //Ordenamos el arreglo de partidas por jugador y por palabra
+    uasort($arregloPartidas, function($a, $b) {
+        //Si el jugador es el mismo, ordeno por palabra
+        if ($a['jugador'] == $b['jugador']) {   
+            //Devuelve la comparación de las palabras: 1 si es mayor, -1 si es menor, 0 si son iguales 
+            return $a['palabraWordix'] <=> $b['palabraWordix'];
+        }
+        //Si el jugador es diferente, ordeno por jugador
+        return $a['jugador'] <=> $b['jugador'];
+    });
+    //Mostramos el arreglo ordenado
+    print_r($arregloPartidas);
+
+}
+
+
+
+
+
 
 
 
@@ -554,12 +587,13 @@ do {
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 5:
-            //completar qué secuencia de pasos ejecutar si el usuario elige la opción 5
+            //Ver estadisticas de un jugador
             estadisticaJugador($coleccionPartidas);
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 6:
-            //completar qué secuencia de pasos ejecutar si el usuario elige la opción 6
+            //Ordenar listado de partidas por jugador y por palabra
+            ordenarYMostrarPartidasPorJugadoryPorPalabra($coleccionPartidas);
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 7:
