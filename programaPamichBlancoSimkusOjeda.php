@@ -74,10 +74,7 @@ function escribirLogo()
  * @return array
  */
 function cargarPartidas()
-{
-    //Inicializo el arreglo
-    $coleccionPartidasPreCargadas = [];
-    // Precarga de partidas
+{   // Precarga de partidas
     $coleccionPartidasPreCargadas =
         [
             ["palabraWordix" => "MUJER", "jugador" => "gabi", "intentos" => 3, "puntaje" => 4],
@@ -92,8 +89,8 @@ function cargarPartidas()
             ["palabraWordix" => "RASGO", "jugador" => "majo", "intentos" => 0, "puntaje" => 0],
             ["palabraWordix" => "RASGO", "jugador" => "majo", "intentos" => 1, "puntaje" => 6]
 
-        ]; 
-    return ($coleccionPartidasPreCargadas);
+        ];
+    return $coleccionPartidasPreCargadas;
 }
 
 /**
@@ -154,7 +151,8 @@ function agregarPalabra($arregloPalabras)
  */
 function verificarSiElUsuarioYaJugoEsaPalabra($arregloPartidas, $palabra, $nombreJugador)
 {
-    /** boolean $yaJugo */
+    // boolean $yaJugo 
+    // int $totPartidas, $i
     $yaJugo = false;
     $totPartidas = count($arregloPartidas);
     $i = 0;
@@ -171,20 +169,24 @@ function verificarSiElUsuarioYaJugoEsaPalabra($arregloPartidas, $palabra, $nombr
 }
 
 /**
- * Esta funcion lee el nombre de un jugador, verifica que sea una palabra y en caso de serlo, retorna el nombre en minusculas.
+ * Esta funcion lee el nombre de un jugador, 
+ * verifica sea una Palabra, 
+ * que tenga entre 3 y 10 caracteres, 
+ * que no este vacio y 
+ * retorna el nombre en minusculas.
  * @return string
  */
 function leerNombreJugador()
 {
-    /** string $nombreJugador */
+    // string $nombreJugador 
     escribirAzul("Ingrese su nombre: ");
     $nombreJugador = trim(fgets(STDIN));
-    while (!esPalabra($nombreJugador)) {
+    while (!esPalabra($nombreJugador) || $nombreJugador == "" || ((strlen($nombreJugador) < 3) || (strlen($nombreJugador) > 10))) {
         escribirAzul("❌❌ El nombre ingresado no es válido, ingrese un nombre válido ❌❌ \n");
         escribirAzul("Ingrese su nombre: ");
         $nombreJugador = trim(fgets(STDIN));
     }
-    
+
     return strtolower($nombreJugador);
 }
 
@@ -384,14 +386,14 @@ function mostrarPrimeraPartidaGanadora($listaDePartidas)
     $nombreGanador = leerNombreJugador();
     // Realizo un recorrido parcial que se cortara al encontrar el elemento
     while (($i < $n) && ($nombreGanador != $nombre)) {
-        if($listaDePartidas[$i]["puntaje"] > 0){
+
+        if ($listaDePartidas[$i]["puntaje"] > 0) {
             $nombre = $listaDePartidas[$i]["jugador"];
-        } 
+        }
         $i = $i + 1;
     }
     // En caso de que el nombre solicitado coincida con alguno de los del arreglo se mostrara su primera partida ganada
     if ($nombreGanador == $nombre) {
-        $nombreGanador = $nombre;
         $i = $i - 1;
         //Agrego el numero de partida como clave a la partida solicitada para mostrarla
         $listaDePartidas[$i]["numeroPartida"] = $i + 1;
@@ -399,7 +401,7 @@ function mostrarPrimeraPartidaGanadora($listaDePartidas)
     }
     // En este caso seria de que el nombre de jugador todavia no haya jugado o ganado una partida de WORDIX
     else {
-        echo str_repeat("\n", 5);
+        echo str_repeat("\n", 3);
         escribirAzul("El jugador ");
         escribirVioleta($nombreGanador);
         escribirAzul(" todavia no ha jugado o ganado una partida de WORDIX\n");
@@ -407,42 +409,46 @@ function mostrarPrimeraPartidaGanadora($listaDePartidas)
 }
 
 
-
-/*Realizaremos la funcion que sacara la estadistica del Jugador desde su nombre */
 /** 
  * Esta funcion tendra que leer el nombre del jugador y un resumen de juego del participante
  * @param array $arregloPartidas
  */
-function estadisticaJugador($arregloPartidas){
+function estadisticaJugador($arregloPartidas)
+{
     /*Esta funcion tendra variables propias como
      String $nombreJugador
 */
-$nombreJugador=leerNombreJugador();
-$arregloEstadistica=obtenerEstadisticasJugador($arregloPartidas, $nombreJugador);
-mostrarEstadisticasPlayer($arregloEstadistica);
-   
+    $nombreJugador = leerNombreJugador();
+    $arregloEstadistica = obtenerEstadisticasJugador($arregloPartidas, $nombreJugador);
+    mostrarEstadisticasPlayer($arregloEstadistica);
 }
 
 /**
  * Muestra por pantalla los resultados de una partida recibida por parámetro.
- * @param array $partida
+ * @param array $estadisticas
  */
 function mostrarEstadisticasPlayer($estadisticas)
 {
     echo str_repeat("\n", 3);
     escribirAzul("************************************************************\n");
-    escribirVioleta("Jugador: " . $estadisticas["jugador"] . "\n".
-    "Partidas: " . $estadisticas["totalPartidas"] . "\n".
-    "Puntaje Total: ".$estadisticas["puntajeTotal"]."\n".
-    "Victorias: ". $estadisticas["victorias"] . "\n".
-    "Porcentaje Victorias: ". $estadisticas["porcentaje"]. "% \n ".
-    "Adivinadas: \n".
-    "   Intento 1: ".$estadisticas["intento1"]."\n".
-    "   Intento 2: ".$estadisticas["intento2"]."\n".
-    "   Intento 3: ".$estadisticas["intento3"]."\n".
-    "   Intento 4: ".$estadisticas["intento4"]."\n".
-    "   Intento 5: ".$estadisticas["intento5"]."\n".
-    "   Intento 6: ".$estadisticas["intento6"]."\n");
+    if($estadisticas["totalPartidas"] == 0){
+        escribirAzul("🎈El jugador ");
+        escribirVioleta($estadisticas["jugador"]);
+        escribirAzul(" no ha jugado ninguna partida de WORDIX.🎈\n");
+    }else{
+        escribirVioleta("Jugador: " . $estadisticas["jugador"] . "\n" .
+        "Partidas: " . $estadisticas["totalPartidas"] . "\n" .
+        "Puntaje Total: " . $estadisticas["puntajeTotal"] . "\n" .
+        "Victorias: " . $estadisticas["victorias"] . "\n" .
+        "Porcentaje Victorias: " . $estadisticas["porcentaje"] . "% \n " .
+        "Adivinadas: \n" .
+        "   Intento 1: " . $estadisticas["intento1"] . "\n" .
+        "   Intento 2: " . $estadisticas["intento2"] . "\n" .
+        "   Intento 3: " . $estadisticas["intento3"] . "\n" .
+        "   Intento 4: " . $estadisticas["intento4"] . "\n" .
+        "   Intento 5: " . $estadisticas["intento5"] . "\n" .
+        "   Intento 6: " . $estadisticas["intento6"] . "\n");
+    }
     //escribirVioleta(. "\n"));
     escribirAzul("************************************************************\n");
     echo str_repeat("\n", 3);
@@ -453,57 +459,67 @@ function mostrarEstadisticasPlayer($estadisticas)
 
 /**
  * Esta funcion  recibe el nombre de un jugador y genera un arreglo asociativo con las estadistica del mismo y lo retorna
- * @param string $nombreJugador;
- * @param array $arregloPartidas;
- * @return array $estadisticasPlayer;
+ * @param array $arregloPartidas
+ * @param string $nombreJugador
+ * @return array $estadisticasPlayer
  */
-function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador){
+function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
+{
+
+    //Creamos array asociativo para guardar la informacion del jugador
+    $estadisticasPlayer = [];
+    $estadisticasPlayer = [
+        "jugador" => $nombreJugador, "puntajeTotal" => 0, "victorias" => 0, "totalPartidas" => 0, "porcentaje" => 0,
+        "intento1" => 0, "intento2" => 0, "intento3" => 0, "intento4" => 0, "intento5" => 0, "intento6" => 0
+    ];
+
+    //Ejecutamos funcion para saber el historial del jugar
+    $arregloPartidasJugador = obtenerPartidasDeUnJugador($arregloPartidas, $nombreJugador);
 
 
-    //creamos array asociativo para guardar la informacion del jugador
-    $estadisticasPlayer=[];
-    $estadisticasPlayer=["jugador"=>$nombreJugador, "puntajeTotal"=>0,"victorias"=>0, "totalPartidas"=>0,"porcentaje"=>0,
-    "intento1"=>0,"intento2"=>0,"intento3"=>0,"intento4"=>0,"intento5"=>0,"intento6"=>0];
- 
-     //Ejecutamos funcion para saber el historial del jugar
-     $arregloPartidasJugador=obtenerPartidasDeUnJugador($arregloPartidas, $nombreJugador);  
     //Guardamos informacion del total de partidas
-    $estadisticasPlayer["totalPartidas"]=count($arregloPartidasJugador);
+    $estadisticasPlayer["totalPartidas"] = count($arregloPartidasJugador);
 
-    //Utilizamos el foreach para utilizar los elementos del array que nos devuelve la funcion obtenerPartidasDeUnJugador
-    foreach($arregloPartidasJugador as $partida){
-        //Sumamos los puntajes que tiene en cada juego
-        $estadisticasPlayer["puntajeTotal"]+=$partida["puntaje"];
+    if ($estadisticasPlayer["totalPartidas"] > 0) {
+        foreach ($arregloPartidasJugador as $partida) {
+            //Sumamos los puntajes que tiene en cada juego
+            $estadisticasPlayer["puntajeTotal"] += $partida["puntaje"];
 
-    //Comprobamos que el puntaje sea superior a cero para saber que es una victoria
-       if ($partida['puntaje']>0){
-        $estadisticasPlayer["victorias"]++;
-       }
-    //Contamos la cantidad de intentos realizados por cada partida
-        switch ($partida['intentos']) {
-            case 1:
-                $estadisticasPlayer['intento1']++;
-                break;
-            case 2:
-                $estadisticasPlayer['intento2']++;
-                break;
-            case 3:
-                $estadisticasPlayer['intento3']++;
-                break;
-            case 4:
-                $estadisticasPlayer['intento4']++;
-                break;
-            case 5:
-                $estadisticasPlayer['intento5']++;
-                break;
-            case 6:
-                $estadisticasPlayer['intento6']++;
-                break;
+            //Comprobamos que el puntaje sea superior a cero para saber que es una victoria
+            if ($partida['puntaje'] > 0) {
+                $estadisticasPlayer["victorias"]++;
+            }
+            //Contamos la cantidad de intentos realizados por cada partida
+            switch ($partida['intentos']) {
+                case 1:
+                    $estadisticasPlayer['intento1']++;
+                    break;
+                case 2:
+                    $estadisticasPlayer['intento2']++;
+                    break;
+                case 3:
+                    $estadisticasPlayer['intento3']++;
+                    break;
+                case 4:
+                    $estadisticasPlayer['intento4']++;
+                    break;
+                case 5:
+                    $estadisticasPlayer['intento5']++;
+                    break;
+                case 6:
+                    $estadisticasPlayer['intento6']++;
+                    break;
+                default:
+                    break;
+            }
         }
+        //Calculamos el porcentaje de Victorias
+        $estadisticasPlayer['porcentaje'] = round((($estadisticasPlayer['victorias'] / $estadisticasPlayer['totalPartidas']) * 100), 0);
     }
-//Calculamos el porcentaje de Victorias
-$estadisticasPlayer['porcentaje']=round((($estadisticasPlayer['victorias']/$estadisticasPlayer['totalPartidas'])*100), 0);
-return $estadisticasPlayer;
+
+    return $estadisticasPlayer;
+    
+
 }
 
 
@@ -516,11 +532,12 @@ return $estadisticasPlayer;
  * @param array $arregloPartidas
  * 
  */
-function ordenarYMostrarPartidasPorJugadoryPorPalabra($arregloPartidas){
+function ordenarYMostrarPartidasPorJugadoryPorPalabra($arregloPartidas)
+{
     //Ordenamos el arreglo de partidas por jugador y por palabra
-    uasort($arregloPartidas, function($a, $b) {
+    uasort($arregloPartidas, function ($a, $b) {
         //Si el jugador es el mismo, ordeno por palabra
-        if ($a['jugador'] == $b['jugador']) {   
+        if ($a['jugador'] == $b['jugador']) {
             //Devuelve la comparación de las palabras: 1 si es mayor, -1 si es menor, 0 si son iguales 
             return $a['palabraWordix'] <=> $b['palabraWordix'];
         }
@@ -529,7 +546,6 @@ function ordenarYMostrarPartidasPorJugadoryPorPalabra($arregloPartidas){
     });
     //Mostramos el arreglo ordenado
     print_r($arregloPartidas);
-
 }
 
 
@@ -597,6 +613,7 @@ do {
             esperarUnosSegundosAntesDeContinuar();
             break;
         case 7:
+            //Agrego una palabra al arreglo de palabras
             $coleccionPalabras = agregarPalabra($coleccionPalabras);
             esperarUnosSegundosAntesDeContinuar();
             break;
@@ -610,6 +627,3 @@ do {
     }
 } while ($opcion != 8);
 
-//$partida = jugarWordix("MELON", strtolower("MaJo"));
-//print_r($partida);
-//imprimirResultado($partida);
