@@ -75,6 +75,7 @@ function escribirLogo()
  */
 function cargarPartidas()
 {   // Precarga de partidas
+    // array $coleccionPartidasPreCargadas
     $coleccionPartidasPreCargadas =
         [
             ["palabraWordix" => "MUJER", "jugador" => "gabi", "intentos" => 3, "puntaje" => 4],
@@ -123,8 +124,7 @@ function esperarUnosSegundosAntesDeContinuar()
  */
 function agregarPalabra($arregloPalabras)
 {
-    /** string $palabraNueva */
-
+    //string $palabraNueva 
     escribirAzul("Agregar palabra nueva a WORDIX o escriba salir para volver al menu anterior \n");
     $palabraNueva = leerPalabra5Letras();
     // Mientras la palabra exista dentro del arreglo solicitara una palabra nueva
@@ -414,10 +414,9 @@ function mostrarPrimeraPartidaGanadora($listaDePartidas)
  * @param array $arregloPartidas
  */
 function estadisticaJugador($arregloPartidas)
-{
-    /*Esta funcion tendra variables propias como
-     String $nombreJugador
-*/
+{ 
+    //String $nombreJugador
+    // array $arregloEstadistica
     $nombreJugador = leerNombreJugador();
     $arregloEstadistica = obtenerEstadisticasJugador($arregloPartidas, $nombreJugador);
     mostrarEstadisticasPlayer($arregloEstadistica);
@@ -466,6 +465,7 @@ function mostrarEstadisticasPlayer($estadisticas)
 function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
 {
 
+    // array $estadisticasPlayer, $arregloPartidasJugador
     //Creamos array asociativo para guardar la informacion del jugador
     $estadisticasPlayer = [];
     $estadisticasPlayer = [
