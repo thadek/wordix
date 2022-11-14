@@ -414,7 +414,7 @@ function mostrarPrimeraPartidaGanadora($listaDePartidas)
  * @param array $arregloPartidas
  */
 function estadisticaJugador($arregloPartidas)
-{ 
+{
     //String $nombreJugador
     // array $arregloEstadistica
     $nombreJugador = leerNombreJugador();
@@ -430,23 +430,23 @@ function mostrarEstadisticasPlayer($estadisticas)
 {
     echo str_repeat("\n", 3);
     escribirAzul("************************************************************\n");
-    if($estadisticas["totalPartidas"] == 0){
+    if ($estadisticas["totalPartidas"] == 0) {
         escribirAzul("🎈El jugador ");
         escribirVioleta($estadisticas["jugador"]);
         escribirAzul(" no ha jugado ninguna partida de WORDIX.🎈\n");
-    }else{
+    } else {
         escribirVioleta("Jugador: " . $estadisticas["jugador"] . "\n" .
-        "Partidas: " . $estadisticas["totalPartidas"] . "\n" .
-        "Puntaje Total: " . $estadisticas["puntajeTotal"] . "\n" .
-        "Victorias: " . $estadisticas["victorias"] . "\n" .
-        "Porcentaje Victorias: " . $estadisticas["porcentaje"] . "% \n " .
-        "Adivinadas: \n" .
-        "   Intento 1: " . $estadisticas["intento1"] . "\n" .
-        "   Intento 2: " . $estadisticas["intento2"] . "\n" .
-        "   Intento 3: " . $estadisticas["intento3"] . "\n" .
-        "   Intento 4: " . $estadisticas["intento4"] . "\n" .
-        "   Intento 5: " . $estadisticas["intento5"] . "\n" .
-        "   Intento 6: " . $estadisticas["intento6"] . "\n");
+            "Partidas: " . $estadisticas["totalPartidas"] . "\n" .
+            "Puntaje Total: " . $estadisticas["puntajeTotal"] . "\n" .
+            "Victorias: " . $estadisticas["victorias"] . "\n" .
+            "Porcentaje Victorias: " . $estadisticas["porcentaje"] . "% \n " .
+            "Adivinadas: \n" .
+            "   Intento 1: " . $estadisticas["intento1"] . "\n" .
+            "   Intento 2: " . $estadisticas["intento2"] . "\n" .
+            "   Intento 3: " . $estadisticas["intento3"] . "\n" .
+            "   Intento 4: " . $estadisticas["intento4"] . "\n" .
+            "   Intento 5: " . $estadisticas["intento5"] . "\n" .
+            "   Intento 6: " . $estadisticas["intento6"] . "\n");
     }
     //escribirVioleta(. "\n"));
     escribirAzul("************************************************************\n");
@@ -465,7 +465,7 @@ function mostrarEstadisticasPlayer($estadisticas)
 function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
 {
 
-    // array $estadisticasPlayer, $arregloPartidasJugador
+    // array $estadisticasPlayer
     //Creamos array asociativo para guardar la informacion del jugador
     $estadisticasPlayer = [];
     $estadisticasPlayer = [
@@ -473,23 +473,21 @@ function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
         "intento1" => 0, "intento2" => 0, "intento3" => 0, "intento4" => 0, "intento5" => 0, "intento6" => 0
     ];
 
-    //Ejecutamos funcion para saber el historial del jugar
-    $arregloPartidasJugador = obtenerPartidasDeUnJugador($arregloPartidas, $nombreJugador);
 
-
-    //Guardamos informacion del total de partidas
-    $estadisticasPlayer["totalPartidas"] = count($arregloPartidasJugador);
-
-    if ($estadisticasPlayer["totalPartidas"] > 0) {
-        foreach ($arregloPartidasJugador as $partida) {
-            //Sumamos los puntajes que tiene en cada juego
+    //Recorremos el arreglo de partidas para obtener las partiads del jugador y ir armando estadisticasPlayer.
+    foreach ($arregloPartidas as $partida) {
+        //Si el nombre del jugador coincide con el nombre del jugador de la partida, se actualizan las estadisticas.
+        if ($partida["jugador"] == $nombreJugador) {
+            //Sumamos los puntajes del jugador
             $estadisticasPlayer["puntajeTotal"] += $partida["puntaje"];
+            //Aumentamos el total de partidas
+            $estadisticasPlayer["totalPartidas"] += 1;
 
-            //Comprobamos que el puntaje sea superior a cero para saber que es una victoria
-            if ($partida['puntaje'] > 0) {
-                $estadisticasPlayer["victorias"]++;
+            //Si el puntaje es mayor a 0, se aumenta el total de victorias.
+            if ($partida["puntaje"] > 0) {
+                $estadisticasPlayer["victorias"] += 1;
             }
-            //Contamos la cantidad de intentos realizados por cada partida
+
             switch ($partida['intentos']) {
                 case 1:
                     $estadisticasPlayer['intento1']++;
@@ -513,13 +511,15 @@ function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
                     break;
             }
         }
+    }
+    if ($estadisticasPlayer["totalPartidas"] > 0) {
         //Calculamos el porcentaje de Victorias
         $estadisticasPlayer['porcentaje'] = round((($estadisticasPlayer['victorias'] / $estadisticasPlayer['totalPartidas']) * 100), 0);
     }
 
-    return $estadisticasPlayer;
-    
 
+
+    return $estadisticasPlayer;
 }
 
 
@@ -626,4 +626,3 @@ do {
             break;
     }
 } while ($opcion != 8);
-
