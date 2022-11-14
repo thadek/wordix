@@ -523,7 +523,7 @@ function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
 
     $tiempo_final = microtime(true);
     $tiempo = $tiempo_final - $tiempo_inicial;
-    escribirAzul("Tiempo de ejecucion de la funcion obtenerEstadisticasJugador + forEach arregloPartidasJugador: " .$tiempo . " segundos\n");
+    escribirAzul(sprintf("Tiempo de ejecucion de la funcion obtenerEstadisticasJugador + forEach arregloPartidasJugador: %f segundos\n", $tiempo));
 
     $tiempo_inicial1 = microtime(true);
     if ($estadisticasPlayer["totalPartidas"] > 0) {
@@ -568,7 +568,8 @@ function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
     
     $tiempo_final1 = microtime(true);
     $tiempo1 = $tiempo_final1 - $tiempo_inicial1;
-    escribirAzul("Tiempo de ejecucion FOREACH: " . $tiempo1 . " segundos");
+
+    escribirAzul(sprintf("Tiempo de ejecucion FOREACH solo %f segundos", $tiempo1));
     
     return $estadisticasPlayer;
     
