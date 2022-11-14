@@ -200,6 +200,7 @@ function obtenerPartidasDeUnJugador($arregloPartidas, $nombreJugador)
 {
     // array $partidasDeUnJugador
     $partidasDeUnJugador = [];
+   
     //Armo un arreglo asociativo con las partidas de ese jugador.
     $partidasDeUnJugador = array_filter($arregloPartidas, function ($partida) use ($nombreJugador) {
         /*Esta funcion recibe un array asociativo que contiene los datos 
@@ -211,6 +212,7 @@ function obtenerPartidasDeUnJugador($arregloPartidas, $nombreJugador)
 
     return $partidasDeUnJugador;
 }
+
 
 
 
@@ -473,6 +475,8 @@ function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
         "intento1" => 0, "intento2" => 0, "intento3" => 0, "intento4" => 0, "intento5" => 0, "intento6" => 0
     ];
 
+
+    $tiempo_inicial = microtime(true);
     //Ejecutamos funcion para saber el historial del jugar
     $arregloPartidasJugador = obtenerPartidasDeUnJugador($arregloPartidas, $nombreJugador);
 
@@ -517,6 +521,55 @@ function obtenerEstadisticasJugador($arregloPartidas, $nombreJugador)
         $estadisticasPlayer['porcentaje'] = round((($estadisticasPlayer['victorias'] / $estadisticasPlayer['totalPartidas']) * 100), 0);
     }
 
+    $tiempo_final = microtime(true);
+    $tiempo = $tiempo_final - $tiempo_inicial;
+    escribirAzul("Tiempo de ejecucion de la funcion obtenerEstadisticasJugador + forEach arregloPartidasJugador: " .$tiempo . " segundos\n");
+
+    $tiempo_inicial1 = microtime(true);
+    if ($estadisticasPlayer["totalPartidas"] > 0) {
+        foreach($arregloPartidas as $partida){
+
+        //Calculo tiempo ejecucion 
+        
+        if($partida["jugador"] == $nombreJugador){
+
+            $estadisticasPlayer["puntajeTotal"] += $partida["puntaje"];
+
+            //Comprobamos que el puntaje sea superior a cero para saber que es una victoria
+            if ($partida['puntaje'] > 0) {
+                $estadisticasPlayer["victorias"]++;
+            }
+            //Contamos la cantidad de intentos realizados por cada partida
+            switch ($partida['intentos']) {
+                case 1:
+                    $estadisticasPlayer['intento1']++;
+                    break;
+                case 2:
+                    $estadisticasPlayer['intento2']++;
+                    break;
+                case 3:
+                    $estadisticasPlayer['intento3']++;
+                    break;
+                case 4:
+                    $estadisticasPlayer['intento4']++;
+                    break;
+                case 5:
+                    $estadisticasPlayer['intento5']++;
+                    break;
+                case 6:
+                    $estadisticasPlayer['intento6']++;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    }
+    
+    $tiempo_final1 = microtime(true);
+    $tiempo1 = $tiempo_final1 - $tiempo_inicial1;
+    escribirAzul("Tiempo de ejecucion FOREACH: " . $tiempo1 . " segundos");
+    
     return $estadisticasPlayer;
     
 
